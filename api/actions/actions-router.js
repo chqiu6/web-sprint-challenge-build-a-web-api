@@ -43,13 +43,12 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     try { 
-        const actionsCreate = await actionsModel.insert(req.body)
         if(!req.body.project_id || !req.body.description || !req.body.notes){
           res.status(400).json({ message : "Missing either project id, description or notes"});
         } else {
+          const actionsCreate = await actionsModel.insert(req.body)
           console.log(actionsCreate);
           res.status(201).json(actionsCreate);
-          next();
         }
     } catch(err){
         next(err);
@@ -59,12 +58,12 @@ router.post("/", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => { 
     const id = req.params.id;
     try { 
-        const actionsUpdate = await actionsModel.update(id, req.body)
         if(!req.body.project_id || !req.body.description || !req.body.notes){
           res.status(400).json({ message : "Missing either project id, description or notes"});
         } else if(!id){
           res.status(400).json({ message : "id doesn't exist"});
         } else {
+        const actionsUpdate = await actionsModel.update(id, req.body)
         console.log(actionsUpdate);
         res.status(200).json(actionsUpdate);
       }

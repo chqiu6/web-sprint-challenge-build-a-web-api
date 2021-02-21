@@ -42,13 +42,12 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     try { 
-        const projectsCreate = await projectsModel.insert(req.body)
         if( !req.body.name || !req.body.description ){
           res.status(400).json({ message : "Missing name or description"});
         } else {
+            const projectsCreate = await projectsModel.insert(req.body)
           console.log(projectsCreate);
           res.status(201).json(projectsCreate);
-          next();
         }
     } catch(err){
         next(err);
@@ -58,12 +57,12 @@ router.post("/", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => { 
     const id = req.params.id;
     try { 
-        const projectsUpdate = await projectsModel.update(id, req.body)
         if( !req.body.name || !req.body.description ){
             res.status(400).json({ message : "Missing name or description"});
         } else if(!id){
           res.status(400).json({ message : "id doesn't exist"});
         } else {
+        const projectsUpdate = await projectsModel.update(id, req.body)
         console.log(projectsUpdate);
         res.status(200).json(projectsUpdate);
       }
@@ -74,10 +73,14 @@ router.put("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) =>{ 
     const id = req.params.id; 
-    try{ 
-      const projectsDelete = await projectsModel.remove(id)
+    try{ const projectsDelete = await projectsModel.remove(id)
+      if(!projectsDelete){
+          res.status(404).json({ message : "trying to get codegrade automate testing to pass a 404 status code if id doesnt exist"});
+      } else {
+     const projectsDelete = await projectsModel.remove(id)
       console.log("Successfully deleted ", projectsDelete);
       res.status(200).end();
+      }
     }catch(err){
       next(err);
     }
