@@ -6,8 +6,8 @@ const server = express();
 // Complete your server here!
 // Do NOT `server.listen()` inside this file!
 server.use(express.json());
-server.use("/actions", actionsRouter);
-server.use("/projects",projectsRouter);
+server.use("/api/actions", actionsRouter);
+server.use("/api/projects",projectsRouter);
 
 server.get("/", (req, res) => {
     res.send(`<h1>web api sprint challenge</h1>`);
